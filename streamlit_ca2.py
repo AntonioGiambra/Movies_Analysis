@@ -31,7 +31,7 @@ tabs = st.tabs([
     "Top Movies by Genre",
     "Genre Trends Over Time",
     "Movie Similarity",
-    "User Profiles"
+    "User Behaviour Analysis"
 ])
 
 # --------------- TAB 1: Genre Popularity ------------------
@@ -54,7 +54,7 @@ with tabs[0]:
         color_continuous_scale='Blues',
         size_max=40,
         labels={'total_votes': 'Total Votes', 'genre': 'Genre', 'avg_rating': 'Average Rating'},
-        title='Hover to see details',
+        title='Hover on each bubble to see details',
         hover_data={'total_votes': True, 'avg_rating': ':.2f', 'genre': True}
     )
 
@@ -95,7 +95,7 @@ with tabs[1]:
         x='avg_rating',
         y='title',
         orientation='h',
-        title=f"Top 5 Movies - {selected_genre}",
+        title=f"Top 5 Movies for {selected_genre}",
         labels={'avg_rating': 'Average Rating', 'title': 'Movie Title'},
         range_x=[0, 5],
         height=400,
@@ -111,7 +111,9 @@ with tabs[1]:
     fig2.update_layout(
         title_font_size=24,
         yaxis_autorange="reversed",
-        showlegend=False
+        showlegend=False,
+        xaxis=dict(title_font=dict(size=24)),
+        yaxis=dict(title_font=dict(size=24))
     )
     st.plotly_chart(fig2, use_container_width=True)
 
@@ -153,8 +155,8 @@ with tabs[2]:
         labels={'genres_list': 'Genre', 'count': 'Ratings'}
     )
     fig3.update_layout(
-        title='Genre Engagement by Year',
-        title_font_size=24,
+        xaxis=dict(title_font=dict(size=24)),
+        yaxis=dict(title_font=dict(size=24)),
         height=800,
         showlegend=False
     )
@@ -208,6 +210,8 @@ with tabs[3]:
         fig4.update_layout(
             title_font_size=24,
             yaxis_autorange='reversed',
+            xaxis=dict(title_font=dict(size=24)),
+            yaxis=dict(title_font=dict(size=24)),
             margin=dict(l=150, t=80),
             height=500
         )
@@ -215,7 +219,7 @@ with tabs[3]:
 
 # --------------- TAB 5: User Profiles ------------------
 with tabs[4]:
-    st.header("User Profiles (Radar Chart)")
+    st.header("User Behaviour Analysis")
 
     df3 = df_movies.copy()
     df4 = df_rating.copy()
@@ -256,7 +260,7 @@ with tabs[4]:
     ))
 
     fig5.update_layout(
-        polar=dict(radialaxis=dict(visible=True, range=[0, 1])),
+        polar=dict(radialaxis=dict(visible=True, range=[0, 1],showticklabels=False)),
         title=f"User {int(selected_user)} Profile",
         showlegend=False
     )
