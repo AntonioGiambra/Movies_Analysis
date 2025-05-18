@@ -23,7 +23,7 @@ def load_data():
 df_movies, df_rating, df_tags = load_data()
 
 # Title
-st.title("🎬 MovieLens Analysis Dashboard")
+st.title("🎬 Movie Analysis Dashboard 🎬")
 
 # Tab Navigation
 tabs = st.tabs([
@@ -54,7 +54,7 @@ with tabs[0]:
         color_continuous_scale='Blues',
         size_max=40,
         labels={'total_votes': 'Total Votes', 'genre': 'Genre', 'avg_rating': 'Average Rating'},
-        title='Genre Popularity vs. Average Rating (Hover to see details)',
+        title='Hover to see details',
         hover_data={'total_votes': True, 'avg_rating': ':.2f', 'genre': True}
     )
 
