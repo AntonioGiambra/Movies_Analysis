@@ -221,16 +221,23 @@ with tabs[3]:
 with tabs[4]:
     st.header("User Behaviour Analysis")
 
+    # Copy original dataframes
     df3 = df_movies.copy()
     df4 = df_rating.copy()
+
+    # Split genres string into lists
     df3['genres'] = df3['genres'].str.split('|')
+
+    # Merge ratings with movie metadata
     df_merged = df4.merge(df3, on='movieId')
 
+    # Compute user profile metrics
     user_profiles = []
     for user_id, group in df_merged.groupby('userId'):
         ratings = group['rating']
         genres_list = group['genres'].explode()
         genre_distribution = genres_list.value_counts(normalize=True)
+
         user_profile = {
             'userId': user_id,
             'Average Rating': ratings.mean(),
@@ -241,27 +248,68 @@ with tabs[4]:
         }
         user_profiles.append(user_profile)
 
+    # Create user profile DataFrame
     df_users = pd.DataFrame(user_profiles)
+
+    # Define selected features for radar chart
     features = ['Average Rating', 'Rating Std Dev', 'Total Ratings', '% High Ratings', 'Genre Diversity']
+    angles = features + [features[0]]  # Add the first feature at the end to close the radar shape
+
+    # Normalize selected features
     scaler = MinMaxScaler()
     df_scaled = df_users.copy()
     df_scaled[features] = scaler.fit_transform(df_users[features])
-    selected_user = st.selectbox("Select User ID:", df_scaled['userId'].astype(int))
-    user_row = df_scaled[df_scaled['userId'] == selected_user].iloc[0]
 
-    values = user_row[features].tolist()
-    values += values[:1]
-    angles = features + [features[0]]
+    # Dropdown to select user
+    selected_user = st.selectbox("Select User ID:", df_scaled['userId'].astype(int))
+
+    # Get both scaled and original values for the selected user
+    user_scaled_row = df_scaled[df_scaled['userId'] == selected_user].iloc[0]
+    user_original_row = df_users[df_users['userId'] == selected_user].iloc[0]
+
+    # Scaled values for plotting
+    scaled_values = user_scaled_row[features].tolist() + [user_scaled_row[features[0]]]
+
+    # Original values for hover text
+    original_values = user_original_row[features].tolist() + [user_original_row[features[0]]]
+
+    # Custom hover text using original (non-scaled) values
+    hovertext = [
+        f"{label}: {val:.2f}%" if label == '% High Ratings' else f"{label}: {val:.2f}"
+        for label, val in zip(angles, original_values)
+    ]
+
+    # Create radar chart with Plotly
     fig5 = go.Figure(data=go.Scatterpolar(
-        r=values,
+        r=scaled_values,
         theta=angles,
         fill='toself',
-        name=f"User {int(selected_user)}"
+        name=f"User {int(selected_user)}",
+        hovertext=hovertext,         # Display original values on hover
+        hoverinfo='text'
     ))
 
+    # Customize layout
     fig5.update_layout(
-        polar=dict(radialaxis=dict(visible=True, range=[0, 1],showticklabels=False)),
-        title=f"User {int(selected_user)} Profile",
-        showlegend=False
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=[0, 1],         # Keep normalized scale for visualization
+                showticklabels=False  # Hide tick labels as requested
+            ),
+            angularaxis=dict(
+                tickfont=dict(size=16)
+            )
+        ),
+        title=dict(
+            text=f"User {int(selected_user)} Profile",
+            font=dict(size=24),
+            x=0.5,
+            xanchor='center'
+        ),
+        showlegend=False,
+        height=700
     )
+
+    # Display chart in Streamlit
     st.plotly_chart(fig5, use_container_width=True)
