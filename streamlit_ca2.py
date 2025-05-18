@@ -54,12 +54,12 @@ with tabs[0]:
         color_continuous_scale='Blues',
         size_max=40,
         labels={'total_votes': 'Total Votes', 'genre': 'Genre', 'avg_rating': 'Average Rating'},
-        title='You can see more details by hovering over each bubble.',
+        title='You can see more details by hovering over each bubble',
         hover_data={'total_votes': True, 'avg_rating': ':.2f', 'genre': True}
     )
 
     fig1.update_layout(
-        title_font_size=24,
+        title_font_size=20,
         xaxis_title_font_size=20,
         yaxis_title_font_size=20,
         height=800,
