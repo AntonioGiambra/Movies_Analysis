@@ -54,7 +54,7 @@ with tabs[0]:
         color_continuous_scale='Blues',
         size_max=40,
         labels={'total_votes': 'Total Votes', 'genre': 'Genre', 'avg_rating': 'Average Rating'},
-        title='Hover on each bubble to see details',
+        title='You can see more details by hovering over each bubble.',
         hover_data={'total_votes': True, 'avg_rating': ':.2f', 'genre': True}
     )
 
@@ -112,8 +112,8 @@ with tabs[1]:
         title_font_size=24,
         yaxis_autorange="reversed",
         showlegend=False,
-        xaxis=dict(title_font=dict(size=24)),
-        yaxis=dict(title_font=dict(size=24))
+        xaxis=dict(title_font=dict(size=20)),
+        yaxis=dict(title_font=dict(size=20))
     )
     st.plotly_chart(fig2, use_container_width=True)
 
@@ -155,8 +155,8 @@ with tabs[2]:
         labels={'genres_list': 'Genre', 'count': 'Ratings'}
     )
     fig3.update_layout(
-        xaxis=dict(title_font=dict(size=24)),
-        yaxis=dict(title_font=dict(size=24)),
+        xaxis=dict(title_font=dict(size=20)),
+        yaxis=dict(title_font=dict(size=20)),
         height=800,
         showlegend=False
     )
@@ -210,8 +210,8 @@ with tabs[3]:
         fig4.update_layout(
             title_font_size=24,
             yaxis_autorange='reversed',
-            xaxis=dict(title_font=dict(size=24)),
-            yaxis=dict(title_font=dict(size=24)),
+            xaxis=dict(title_font=dict(size=20)),
+            yaxis=dict(title_font=dict(size=20)),
             margin=dict(l=150, t=80),
             height=500
         )
